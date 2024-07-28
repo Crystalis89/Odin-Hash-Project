@@ -14,8 +14,8 @@ class HashMap {
     if (!size) {
       size = this.maxbuckets
     } 
-
     this.buckets = new Array(size);
+    this.maxbuckets = size
   }
 
 
@@ -30,80 +30,74 @@ class HashMap {
         }
         return hashCode % bucketcount
       } 
-      
-
-  expandbuckets(bucketlist) {
-    bucketlist.maxbuckets = bucketlist.buckets.length *= 2
-    let expanded = new HashMap(bucketlist.maxbuckets)
-    expanded.maxbuckets = bucketlist.maxbuckets
-
-    for (const bucket of bucketlist.buckets) {
-
-   
-      if (bucket !== undefined && bucket.head === null) {
-
-
-        let currentnode = bucket.next
-        let i = 0
-
-        while (currentnode.next !== null  || i < 10000) {   
- 
-
-          bucketlist.set(expanded, currentnode.key, currentnode.value)                  
      
+expandbuckets(bucketlist) {
 
-           if (currentnode.next === null) {
-              break
-            }
-          currentnode = currentnode.next
-          i++
+  bucketlist.maxbuckets = bucketlist.maxbuckets * 2;
+  // let expanded = new HashMap(bucketlist.maxbuckets);
+let holding = []
+
+  for (const bucket of bucketlist.buckets) {
+      if (bucket !== undefined && bucket.head === null) {
+          let currentnode = bucket.next;
+          holding.push(currentnode)
+
       }
-    }  
-   
-    }
+  }
 
-    return expanded
+  bucketlist.buckets.length = 0
+
+  for (const entry of holding) {
+    
+        console.log(entry)
+          let currentnode = entry;
+          let i = 0;
+
+          while (currentnode.next !== null || i < 10000) {
+              i++;
+              bucketlist.set(bucketlist, currentnode.key, currentnode.value);
+              console.log(currentnode)
+
+              console.log(bucketlist.buckets)
+
+              if (currentnode.next === null) {
+                  break;
+              }
+              currentnode = currentnode.next;
+      }
+  }
+
+  return bucketlist; 
 }
 // // takes two arguments, the first is a key and the second is a value that is assigned to this key. If a key already exists, then the old value is overwritten or we can say that we update the key’s value
 
 // //Attach it to the head of the linked list so dont have to traverse the list to add to it since order doesnt matter
 set(bucketlist, key, value) {
 
-
-  let emptyObjectsCount = bucketlist.buckets.filter(node => Object.keys(node).length !== 0).length;
-
+  let emptyObjectsCount = bucketlist.buckets.reduce((count, node) => count + (Object.keys(node).length !== 0 ? 1 : 0), 0); 
+  
+  console.log(emptyObjectsCount / bucketlist.maxbuckets)
   if (emptyObjectsCount / bucketlist.maxbuckets >= .75) {
       bucketlist.expandbuckets(bucketlist)  
 
   }
 
-  //I am guessing something off with this hashing function being the cause of it not spreading across the table as much as it should. When I manually ran a set after the table expanded the hash correctly worked. So maybe problem is in the function not being passed the right maxbucket value after expansion.
-
-  //log after hashed showing the correct higher values so again not sure why it seeming to use the hashed values from pre expansion.
-  // console.log(bucketlist.maxbuckets)
   let hashed = bucketlist.hash(key, bucketlist.maxbuckets)
-  console.log(hashed)
-
-
   let newentry =  {key, value, next:null}
 
-  if (!bucketlist.buckets[hashed]) {
-  
+  if (bucketlist.buckets[hashed] === undefined) {
 
     bucketlist.buckets[hashed] = {}
     bucketlist.buckets[hashed].head = null
     bucketlist.buckets[hashed].next = null
-
   }
 
   if (bucketlist.buckets[hashed].head === null) {
     newentry.next = bucketlist.buckets[hashed].next
     bucketlist.buckets[hashed].next = newentry   
   } else {
-    bucketlist.buckets[hashed].head = null
     bucketlist.buckets[hashed].next = newentry
   }
-
 
 }
 
@@ -189,8 +183,8 @@ test.set(test,'kite', 'pink')
 test.set(test,'test', 'test2')
 test.set(test,'test3', 'test4')
 test.set(test,'kitaacae', 'piacdcnk')
-test.set(test,'abcd', 'piacdcnk')
-test.set(test,'zxy', 'piacdcnk')
+test.set(test,'abcd', 'ebebh')
+test.set(test,'zxy', 'b eeb')
 
 
 console.log(test)
