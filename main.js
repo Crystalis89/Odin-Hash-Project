@@ -161,34 +161,87 @@ set(bucketlist, key, value) {
 
 
 // // returns the number of stored keys in the hash map.
-// length() {
+length(bucketlist) {
+  let hashmapLength = 0
+  for (const bucket of bucketlist.buckets) {
 
+    if (bucket !== undefined) {
+      let currentnode = bucket.next
+      let i = 0
 
+      while (currentnode.next !== null || i < 10000) {
+        i++;
+        hashmapLength++
     
-// }
+        if (currentnode.next === null) {
+            break;
+        }
+        currentnode = currentnode.next;
+     }
+    }
+
+  }
+  return hashmapLength  
+}
 
 
 // //  removes all entries in the hash map.
  clear(bucketlist){
 bucketlist.buckets.length = 0
-bucketlist.maxbuckets = 7
-
-    
+bucketlist.maxbuckets = 7    
  }
 
 
 // // returns an array containing all the keys inside the hash map.
-// keys() {
+keys(bucketlist) {
+  let allkeys = []
+  for (const bucket of bucketlist.buckets) {
 
+    if (bucket !== undefined) {
+      let currentnode = bucket.next
+      let i = 0
+
+      while (currentnode.next !== null || i < 10000) {
+        i++;
+        allkeys.push(currentnode.key)
     
-// }
+        if (currentnode.next === null) {
+            break;
+        }
+        currentnode = currentnode.next;
+     }
+    }
+
+  }
+    return allkeys
+}
 
 
-// //  returns an array containing all the values.
-//  values(){
+//  returns an array containing all the values.
+ values(bucketlist){
+  let allvalues = []
 
-    
-//  }
+  for (const bucket of bucketlist.buckets) {
+
+    if (bucket !== undefined) {
+      let currentnode = bucket.next
+      let i = 0
+
+      while (currentnode.next !== null || i < 10000) {
+        i++;
+        allvalues.push(currentnode.value)
+  
+  
+        if (currentnode.next === null) {
+            break;
+        }
+        currentnode = currentnode.next;
+     }
+    }
+
+  }
+  return allvalues
+ }
 
 
 // // returns an array that contains each key, value pair. Example: [[firstKey, firstValue], [secondKey, secondValue]]
